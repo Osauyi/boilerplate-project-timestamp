@@ -27,37 +27,45 @@ app.get("/api/hello", function (req, res) {
 
 app.get("/api/timestamp", function(req, res){
    var date = new Date()
-   res.json({unix : date.getMilliseconds()})
+     res.json({
+    "unix": date.valueOf(),
+    "utc": date.toUTCString()
+  });
 })
 
 
-app.get("api/timestamp/:dates", function(req, res){
+app.get("api/timestamp/:dateString", function(req, res){
 
-   let {dateString} = req.params
+   let {dateString} = req.params.dateString
    let timestamp
 
-   if (numericalString(dateString)) {
+   if(!dateString) {
+      timestamp = new Date()
+   } else {
+
+   if (!isNaN(dateString)) {
       timestamp = new Date(parseInt(dateString))
    } else{
-      timestamp = new Date(dateString)
+         timestamp = new Date(dateString)
+      }
    }
 
-   if(isNaN(timestamp.getTime())) {
+   if(timestamp.toString() === "Invalid Date") {
       res.json({error : "Invalid date"})
    } else {
-      res.json({timestamp : timestamp.getTime()})
+      res.json({unix : timestamp.getTime(), utc : timestamp.toUTCString()})
    }
 })
 
-function numericalString(string) {
-   const numericalCharacters = "0123456789"
-   for (let i = 0; i < string.length; i++) {
-      if (!numericalCharacters.includes(string[i])){
-         return false
-      }
-   }
-   return true
-}
+// function numericalString(string) {
+//    const numericalCharacters = "0123456789"
+//    for (let i = 0; i < string.length; i++) {
+//       if (!numericalCharacters.includes(string[i])){
+//          return false
+//       }
+//    }
+//    return true
+
 
 
 
