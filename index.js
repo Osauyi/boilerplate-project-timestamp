@@ -25,14 +25,40 @@ app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
 
-app.get("/api/:date", function(req, res){
+app.get("/api/timestamp", function(req, res){
    var date = new Date()
-   res.json({unix : date})
+   res.json({unix : date.getMilliseconds()})
 })
 
-// app.get('/products/:id', function (req, res, next) {
-//   res.json({msg: 'This is CORS-enabled for all origins!'})
-// })
+
+app.get("api/timestamp/:dates", function(req, res){
+
+   let {dateString} = req.params
+   let timestamp
+
+   if (numericalString(dateString)) {
+      timestamp = new Date(parseInt(dateString))
+   } else{
+      timestamp = new Date(dateString)
+   }
+
+   if(isNaN(timestamp.getTime())) {
+      res.json({error : "Invalid date"})
+   } else {
+      res.json({timestamp : timestamp.getTime()})
+   }
+})
+
+function numericalString(string) {
+   const numericalCharacters = "0123456789"
+   for (let i = 0; i < string.length; i++) {
+      if (!numericalCharacters.includes(string[i])){
+         return false
+      }
+   }
+   return true
+}
+
 
 
 // listen for requests :)
