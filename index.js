@@ -5,7 +5,7 @@
 var express = require('express');
 var app = express();
 
-let URL = "https://en.wikipedia.org/wiki/Cross-origin_resource_sharing"
+let CORS = "https://en.wikipedia.org/wiki/Cross-origin_resource_sharing"
 // enable CORS (https://en.wikipedia.org/wiki/Cross-origin_resource_sharing)
 // so that your API is remotely testable by FCC 
 var cors = require('cors');
@@ -27,8 +27,12 @@ app.get("/api/hello", function (req, res) {
 
 app.get("/api/:date", function(req, res){
    var date = new Date()
-   res.json({utc : date})
+   res.json({unix : date})
 })
+
+// app.get('/products/:id', function (req, res, next) {
+//   res.json({msg: 'This is CORS-enabled for all origins!'})
+// })
 
 
 // listen for requests :)
